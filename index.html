@@ -47,6 +47,33 @@
 <p>Further more, you can still use OkBuck to maintain your BUCK build system when your gradle configurations changes, OkBuck let you even needn't write one line of the magic BUCK script! </p>
 
 <h2>
+<a id="who-is-using-okbuck" class="anchor" href="#who-is-using-okbuck" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Who is using OkBuck?</h2>
+
+<table>
+<thead>
+<tr>
+<th>Logo</th>
+<th>User</th>
+<th>Repo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://frontend-yoloyolo-tv.alikunlun.com/official/v3/img/pc/logo.png" alt="YOLO logo"></td>
+<td><a href="https://www.yoloyolo.tv/">YOLO</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><img src="https://avatars2.githubusercontent.com/u/3098704?v=3&amp;s=64" alt="Piasy avatar"></td>
+<td><a href="https://github.com/Piasy">Piasy</a></td>
+<td><a href="https://github.com/Piasy/AndroidTDDBootStrap">AndroidTDDBootStrap</a></td>
+</tr>
+</tbody>
+</table>
+
+<p>If you are using OkBuck in your project, <a href="mailto:xz4215@gmail.com">send me a e-mail</a>, I'll add your repo in this list.</p>
+
+<h2>
 <a id="full-example" class="anchor" href="#full-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Full example</h2>
 
 <p>Configurations in root project <code>build.gradle</code> file:</p>
@@ -56,7 +83,7 @@
         jcenter()
     }
     dependencies {
-        classpath <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy:okbuck-gradle-plugin:1.0.0<span class="pl-pds">'</span></span>
+        classpath <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy:okbuck-gradle-plugin:1.0.0-beta3<span class="pl-pds">'</span></span>
     }
 }
 
@@ -159,31 +186,16 @@ apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds"
 <p>The rest modules in this repo is a full example usage of OkBuck and BUCK.</p>
 
 <h2>
-<a id="who-is-using-okbuck" class="anchor" href="#who-is-using-okbuck" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Who is using OkBuck?</h2>
+<a id="compatibility" class="anchor" href="#compatibility" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Compatibility</h2>
 
-<table>
-<thead>
-<tr>
-<th>Logo</th>
-<th>User</th>
-<th>Repo</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><img src="https://frontend-yoloyolo-tv.alikunlun.com/official/v3/img/pc/logo.png" alt="YOLO logo"></td>
-<td><a href="https://www.yoloyolo.tv/">YOLO</a></td>
-<td>-</td>
-</tr>
-<tr>
-<td><img src="https://avatars2.githubusercontent.com/u/3098704?v=3&amp;s=64" alt="Piasy avatar"></td>
-<td><a href="https://github.com/Piasy">Piasy</a></td>
-<td><a href="https://github.com/Piasy/AndroidTDDBootStrap">AndroidTDDBootStrap</a></td>
-</tr>
-</tbody>
-</table>
+<p>OkBuck is tested under <code>gradle</code> 2.2.1 ~ 2.10, and <code>com.android.tools.build:gradle</code> 1.5.0. Other versions will not considered compatible, if you have compatibility problem, please fire an issue.</p>
 
-<p>If you are using OkBuck in your project, <a href="mailto:xz4215@gmail.com">send me a e-mail</a>, I'll add your repo in this list.</p>
+<p>Exceptions:</p>
+
+<ul>
+<li> gradle 2.4 need force jdk version to 1.7, <a href="http://stackoverflow.com/a/21212790/3077508">ref1</a> and <a href="http://stackoverflow.com/a/18144853/3077508">ref2</a>
+</li>
+</ul>
 
 <h2>
 <a id="contribution" class="anchor" href="#contribution" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contribution</h2>
