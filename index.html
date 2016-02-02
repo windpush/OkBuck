@@ -35,172 +35,128 @@
 <a href="https://travis-ci.org/Piasy/OkBuck"><img src="https://travis-ci.org/Piasy/OkBuck.svg?branch=master" alt="Master branch build status"></a>
 <a href="https://android-arsenal.com/details/1/2593"><img src="https://img.shields.io/badge/Android%20Arsenal-OkBuck-green.svg?style=flat" alt="Android Arsenal"></a></p>
 
-<p>OkBuck is a gradle plugin, aiming to help developers utilize the super fast build system: BUCK, based on the existing project with Android Studio + gradle, and keep both build systems work, with less to only <strong>10 lines of configuration</strong>.</p>
+<p>OkBuck is a gradle plugin, aiming to help developers utilize the super fast build system: BUCK, based on the existing project with Android Studio + gradle, and keep both build systems work, with few lines configuration.</p>
 
 <p><a href="https://github.com/Piasy/OkBuck/wiki">Wiki</a>, <a href="README-zh.md">中文版</a></p>
 
 <h2>
 <a id="why-okbuck" class="anchor" href="#why-okbuck" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why OkBuck?</h2>
 
-<p>Android Studio + Gradle has already been many Android developers' option, and to migrate to buck, there are many works to be done, which are difficult and buggy. OkBuck aims to provide a gradle plugin, which will do these buggy job for you automaticlly after several lines configuration.</p>
+<p>Android Studio + Gradle has already been many Android developers' option, and to migrate to BUCK, there are many works to be done, which are difficult and buggy. OkBuck aims to provide a gradle plugin, which will do these buggy job for you automaticlly after few lines configuration.</p>
 
 <p>Further more, you can still use OkBuck to maintain your BUCK build system when your gradle configurations changes, OkBuck let you even needn't write one line of the magic BUCK script! </p>
 
 <h2>
-<a id="what-will-okbuck-do-for-you" class="anchor" href="#what-will-okbuck-do-for-you" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What will OkBuck do for you?</h2>
+<a id="full-example" class="anchor" href="#full-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Full example</h2>
 
-<ul>
-<li> Generate <code>.buckconfig</code>.</li>
-<li> Copy third-party libraries' jar/aar files to your rootProject directory.</li>
-<li> Generate <code>BUCK</code> file for third-party libraries and each sub modules.</li>
-<li> After you run <code>./gradlew okbuck</code> in your rootProject root directory, you can run <code>buck install appFlavorVariant</code> (suppose your application module names <code>app</code> and you have already installed BUCK, the <code>Flavor</code> and <code>Variant</code> part is just like Gradle task names, if you have a flavor <code>dev</code>, then you can run <code>buck install</code> with <code>appDevDebug</code>, <code>appDevRelease</code>, if no flavor, only <code>appDebug</code> and <code>appRelease</code> available).</li>
-</ul>
+<p>Configurations in root project <code>build.gradle</code> file:</p>
 
-<h2>
-<a id="how-to-use-okbuck" class="anchor" href="#how-to-use-okbuck" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use OkBuck?</h2>
+<div class="highlight highlight-source-groovy-gradle"><pre><span class="pl-en">buildscript</span> {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy:okbuck-gradle-plugin:1.0.0<span class="pl-pds">'</span></span>
+    }
+}
 
-<ol>
-<li>
-<p>Add this lines into buildscript dependencies part of root rootProject build.gradle (the latest version is displayed on the download badge above): </p>
+<span class="pl-en">allprojects</span> {
+    repositories {
+        jcenter()
+    }
+}
 
-<div class="highlight highlight-source-groovy"><pre>classpath <span class="pl-s"><span class="pl-pds">"</span>com.github.piasy:okbuck-gradle-plugin:<span class="pl-s1"><span class="pl-pse">${</span>latest version<span class="pl-pse">}</span></span><span class="pl-pds">"</span></span></pre></div>
+apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck-gradle-plugin<span class="pl-pds">'</span></span>
 
-<ul>
-<li> ${latest version} should be substituted with the real specific version, the latest version could be see from the bintray badge on the top of this document.</li>
-</ul>
-</li>
-<li>
-<p>Add this line into root rootProject build.gradle: </p>
-
-<div class="highlight highlight-source-groovy"><pre>apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck-gradle-plugin<span class="pl-pds">'</span></span></pre></div>
-</li>
-<li>
-<p>Add this <code>okbuck</code> block into root rootProject build.gradle:</p>
-
-<div class="highlight highlight-source-groovy-gradle"><pre><span class="pl-en">okbuck</span> {
+<span class="pl-en">okbuck</span> {
+    buildToolVersion <span class="pl-s"><span class="pl-pds">"</span>23.0.1<span class="pl-pds">"</span></span>
     target <span class="pl-s"><span class="pl-pds">"</span>android-23<span class="pl-pds">"</span></span>
     overwrite <span class="pl-c1">true</span>
+    checkDepConflict true
     resPackages <span class="pl-k">=</span> [
-        <span class="pl-s"><span class="pl-pds">'</span>dummylibrary<span class="pl-pds">'</span></span>: <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck.example.dummylibrary<span class="pl-pds">'</span></span>,
-        <span class="pl-s"><span class="pl-pds">'</span>app<span class="pl-pds">'</span></span>: <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck.example<span class="pl-pds">'</span></span>,
+            <span class="pl-c1">dummylibrary</span>: <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck.example.dummylibrary<span class="pl-pds">'</span></span>,
+            <span class="pl-c1">app</span>         : <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck.example<span class="pl-pds">'</span></span>,
+            <span class="pl-c1">anotherapp</span>  : <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck.example.anotherapp<span class="pl-pds">'</span></span>,
+            <span class="pl-c1">common</span>      : <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck.example.common<span class="pl-pds">'</span></span>,
+            <span class="pl-c1">emptylibrary</span>: <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck.example.empty<span class="pl-pds">'</span></span>,
+    ]
+    linearAllocHardLimit <span class="pl-k">=</span> [
+            <span class="pl-c1">app</span>: <span class="pl-c1">7194304</span>
+    ]
+    primaryDexPatterns <span class="pl-k">=</span> [
+            <span class="pl-c1">app</span>: [
+                    <span class="pl-s"><span class="pl-pds">'</span>^com/github/piasy/okbuck/example/AppShell^<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>^com/github/piasy/okbuck/example/BuildConfig^<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>^android/support/multidex/<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>^com/facebook/buck/android/support/exopackage/<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>^com/github/promeg/xlog_android/lib/XLogConfig^<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>^com/squareup/leakcanary/LeakCanary^<span class="pl-pds">'</span></span>,
+            ]
+    ]
+    exopackage <span class="pl-k">=</span> [
+            <span class="pl-c1">app</span>: <span class="pl-c1">true</span>
+    ]
+    appClassSource <span class="pl-k">=</span> [
+            <span class="pl-c1">app</span>: <span class="pl-s"><span class="pl-pds">'</span>src/main/java/com/github/piasy/okbuck/example/AppShell.java<span class="pl-pds">'</span></span>
+    ]
+    appLibDependencies <span class="pl-k">=</span> [
+            <span class="pl-c1">app</span>: [
+                    <span class="pl-s"><span class="pl-pds">'</span>buck-android-support<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>multidex<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>javalibrary<span class="pl-pds">'</span></span>,
+            ]
+    ]
+    flavorFilter <span class="pl-k">=</span> [
+            <span class="pl-c1">app</span>: [
+                    <span class="pl-s"><span class="pl-pds">'</span>dev<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>prod<span class="pl-pds">'</span></span>,
+            ]
     ]
 }</pre></div>
-
-<ul>
-<li>
-<p>Note that <code>okbuck-gradle-plugin</code> hosts on jcenter, so you need to add jcenter to your buildscript repositories and allprojects repositories list, like below, also note that the declare order matters.</p>
-
-<div class="highlight highlight-source-groovy-gradle"><pre>  <span class="pl-en">buildscript</span> {
-      repositories {
-          jcenter()
-      }
-      dependencies {
-          classpath <span class="pl-s"><span class="pl-pds">'</span>com.android.tools.build:gradle:1.3.0<span class="pl-pds">'</span></span>
-          classpath <span class="pl-s"><span class="pl-pds">"</span>com.github.piasy:okbuck-gradle-plugin:0.3.3<span class="pl-pds">"</span></span>
-      }
-  }
-
-  <span class="pl-en">allprojects</span> {
-      repositories {
-          jcenter()
-      }
-  }
-
-  apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck-gradle-plugin<span class="pl-pds">'</span></span>
-
-  <span class="pl-en">okbuck</span> {
-      <span class="pl-k">..</span>.
-  }</pre></div>
-</li>
-</ul>
-</li>
-<li><p>Run <code>./gradlew okbuck</code> and then run <code>buck install appFlavorVariant</code>, enjoy your life with BUCK.</p></li>
-</ol>
 
 <h2>
 <a id="explanations" class="anchor" href="#explanations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Explanations</h2>
 
 <ul>
-<li> <code>android-23</code> works equally with <code>compileSdkVersion 23</code>.</li>
-<li> <code>overwrite</code> is used to control whether overwrite existing buck files; </li>
-<li>
-<p>OkBuck will extract signing config defined in your build.gradle, and the generated BUCK signing configs is put under <code>/.okbuck/keystore</code> folder.</p>
+<li> OkBuck hosts on jcenter, so <code>jcenter()</code> must be added into <code>buildscript</code> and <code>allprojects</code>' <code>repositories</code> list, and must add before <code>apply plugin</code>
+</li>
+<li> <code>buildToolVersion</code> specifies the version of the Android SDK Build-tools, default <code>23.0.1</code>
+</li>
+<li> <code>target</code> specifies the Android target sdk version, which could be abtained by <code>&lt;sdk home&gt;/tools/android list targets --compact</code>, default <code>android-23</code>
+</li>
+<li> <code>overwrite</code> is used to control whether overwrite existing BUCK files, default <code>false</code>
+</li>
+<li> <code>checkDepConflict</code> is used to control whether check dependency conflict, default <code>true</code>
+</li>
+<li> <code>resPackages</code> is a map, used for specifing Android library module and Android Application module's package name for generated resources, its key is module's name, value is package name, must be specified, it should be the same as <code>package</code> part in corresponding <code>AndroidManifest.xml</code> file</li>
+<li> <code>linearAllocHardLimit</code> and <code>primaryDexPatterns</code> are maps, used for specifing linearAllocHardLimit and primaryDexPatterns used by BUCK multidex, more details about multidex configuration, please read <a href="https://github.com/Piasy/OkBuck/wiki/Multidex-Configuration-Guide">multidex wiki page</a>, if you don't need multidex (not enable it in <code>build.gradle</code>), you can ignore these two parameters</li>
+<li> <code>exopackage</code>, <code>appClassSource</code> and <code>appLibDependencies</code> are maps, used for configuring BUCK exopackage mode, more details about exopackage configuration, please read <a href="https://github.com/Piasy/OkBuck/wiki/Exopackage-Configuration-Guide">exopackage wiki page</a>, if you don't need exopackage, you can ignore these three parameters</li>
+<li> <code>flavorFilter</code> is a map, used for controlling OkBuck only generate BUCK files for flavors you need, default is empty, which will generate all flavors BUCK file</li>
+<li> After apply OkBuck plugin (sync project after modify root project <code>build.gradle</code> file), two tasks are added into your gradle project , <code>okbuck</code>, and <code>okbuckClean</code>
 
 <ul>
-<li> You needn't do anything if you have already set <strong>only one</strong> signing config in your build.gradle, but note that there is a default signing config named <code>debug</code> generated by android gradle plugin.</li>
-<li>
-<p>But you need to configure git to ignore your signing secret, add this line to your <strong>root rootProject .gitignore file</strong>:</p>
-
-<pre><code>.okbuck/keystore
-</code></pre>
-</li>
-<li>
-<p>If you defined multiple signing configs (including the default <code>debug</code> one), or you want to put OkBuck's generated signing config in another folder which <strong>must be under your root rootProject folder</strong>, you can set it like below, <code>keystoreDir</code> is used to set the path OkBuck to put your generated signing config (relative to your root rootProject folder, no prefix <code>/</code>), and <code>signConfigName</code> is to set the name of the signing config you want to use.</p>
-
-<div class="highlight highlight-source-groovy-gradle"><pre><span class="pl-en">okbuck</span> {
-    target <span class="pl-s"><span class="pl-pds">"</span>android-23<span class="pl-pds">"</span></span>
-    keystoreDir <span class="pl-s"><span class="pl-pds">"</span>.okbuck/keystore<span class="pl-pds">"</span></span>
-    signConfigName <span class="pl-s"><span class="pl-pds">"</span>release<span class="pl-pds">"</span></span>
-    overwrite <span class="pl-c1">true</span>
-    resPackages <span class="pl-k">=</span> [
-        <span class="pl-s"><span class="pl-pds">'</span>dummylibrary<span class="pl-pds">'</span></span>: <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck.example.dummylibrary<span class="pl-pds">'</span></span>,
-        <span class="pl-s"><span class="pl-pds">'</span>app<span class="pl-pds">'</span></span>: <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy.okbuck.example<span class="pl-pds">'</span></span>,
-    ]
-}</pre></div>
-</li>
-<li> But also remember to configure git to ignore your signing secret.</li>
-<li> Full example could be found in the app module of this repo, <a href="build.gradle">root rootProject build.gradle</a>, <a href="app/build.gradle">app module build.gradle</a>.</li>
+<li> <code>okbuck</code> will generate all flavor (you specified) and variant BUCK configs, and each flavor + variant combination will have an BUCK alias</li>
+<li> <code>okbuckClean</code> will <strong>delete all</strong> files/dirs generated by OkBuck and BUCK</li>
 </ul>
 </li>
-<li><p><code>resPackages</code> is used to set Android library module and Android Application module's package name for generated resources (<code>R</code> in common cases), you need substitute dummylibrary/app with your own module name (before the colon, if your module is not in the project root dir, i.e. in your <code>settings.gradle</code> is <code>include ':lib:common'</code>, you should use <code>common</code> rather than <code>:lib:common</code>), and set the corresponding package name after the colon, which should be the same package name specified in the corresponding module's <code>AndroidManifest.xml</code>.</p></li>
-<li>
-<p>There are 2 tasks added into your gradle project after apply OkBuck, <code>okbuck</code>, and <code>okbuckClean</code>.</p>
-
-<ul>
-<li> <code>okbuckClean</code> will <strong>delete all</strong> files generated by OkBuck.</li>
-<li> <code>okbuck</code> will generate all flavor and variant BUCK configs, and each flavor + variant combination will have an BUCK alias, e.g. <code>appDevDebug</code>, <code>appProdRelease</code>, <code>anotherappDebug</code> etc.</li>
-</ul>
-</li>
+<li> After execute <code>./gradlew okbuck</code>, there will be a <code>.buckconfig</code> file in your project root dir, inside it, there are lots of BUCK alias, e.g. <code>appDevDebug</code>, <code>appProdRelease</code>, <code>anotherappDebug</code> etc, which you could use to run BUCK build, e.g. <code>buck build appDevDebug</code> etc</li>
 </ul>
 
 <h2>
-<a id="more-jobs-need-to-be-done" class="anchor" href="#more-jobs-need-to-be-done" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>More jobs need to be done</h2>
+<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Troubleshooting</h2>
+
+<p>If you come with bugs of OkBuck, please <a href="https://github.com/Piasy/OkBuck/issues/new">open an issue</a>, and it's really appreciated to post the output of <code>./gradle okbuck --stacktrace --debug</code> at the same time, or you can join our BUCK QQ group: <code>170102067</code>.</p>
+
+<h2>
+<a id="after-apply-okbuck-successfully" class="anchor" href="#after-apply-okbuck-successfully" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>After apply OkBuck successfully</h2>
 
 <p>OkBuck can only generate BUCK configs for you, so if your source code is incompatible with BUCK, you need do more jobs.</p>
 
 <p>Read more on <a href="https://github.com/Piasy/OkBuck/wiki/Known-caveats">Known caveats wiki page</a>. </p>
 
-<p>Maybe there are more caveats waiting for you, but for the super fast build brought by buck, it's worthwhile.</p>
+<p>Maybe there are more caveats waiting for you, but for the super fast build brought by BUCK, it's worthwhile.</p>
 
-<p>The rest modules in this repo is a full example usage of OkBuck.</p>
-
-<h2>
-<a id="known-caveats" class="anchor" href="#known-caveats" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/Piasy/OkBuck/wiki/Known-caveats">Known caveats</a>
-</h2>
-
-<h2>
-<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Troubleshooting</h2>
-
-<p>If you come with bugs of OkBuck, please <a href="https://github.com/Piasy/OkBuck/issues/new">open an issue</a>, and it's really appreciated to post the output of <code>./gradle okbuck --stacktrace</code> at the same time.</p>
-
-<h2>
-<a id="contribution" class="anchor" href="#contribution" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contribution</h2>
-
-<p>Contributions are welcome! See the <a href="https://github.com/Piasy/OkBuck/wiki/TODO-list">detail todo list</a>.</p>
-
-<p>If you want to help improve OkBuck, please comment on the corresponding issue, with your expected fix due date, I'll pull you in and assign it to you, and push you.</p>
-
-<p>Note that you need create an empty file named <code>bintray.properties</code> in <code>/buildSrc/</code>, it contains the bintray config, and you don't need it.</p>
-
-<h2>
-<a id="acknowledgement" class="anchor" href="#acknowledgement" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Acknowledgement</h2>
-
-<ul>
-<li> Thanks for Facebook open source <a href="https://github.com/facebook/buck">buck</a> build system.</li>
-<li> Thanks for the discussion and help from <a href="https://github.com/promeG/">promeG</a> during my development.</li>
-<li> Thanks for <a href="#">ヤ①個亼簡單</a> of the manifest merge contribution, and the idea of multi-product flavor support.</li>
-<li> Thanks for <a href="mailto:hujin1860@gmail.com">hujin1860@gmail.com</a> of the manifest genrule advice.</li>
-</ul>
+<p>The rest modules in this repo is a full example usage of OkBuck and BUCK.</p>
 
 <h2>
 <a id="who-is-using-okbuck" class="anchor" href="#who-is-using-okbuck" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Who is using OkBuck?</h2>
@@ -220,94 +176,54 @@
 </tbody>
 </table>
 
-<p>If you are using OkBuck in your open source project, <a href="mailto:xz4215@gmail.com">send me a e-mail</a> with your repo url, I'll add your repo in this list.</p>
+<p>If you are using OkBuck in your project, <a href="mailto:xz4215@gmail.com">send me a e-mail</a>, I'll add your repo in this list.</p>
 
 <h2>
-<a id="change-log" class="anchor" href="#change-log" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Change log</h2>
+<a id="contribution" class="anchor" href="#contribution" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contribution</h2>
+
+<p>Any form of contributions are welcome! See the <a href="https://github.com/Piasy/OkBuck/wiki/TODO-list">detail todo list</a>.</p>
+
+<p>Note that you need create an empty file named <code>bintray.properties</code> in <code>/buildSrc/</code>, which is used for publishing to bintray.</p>
+
+<h2>
+<a id="acknowledgement" class="anchor" href="#acknowledgement" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Acknowledgement</h2>
 
 <ul>
-<li> 0.4.9: fix bug in exopackage</li>
-<li> 0.4.8: minimal support for exopackage</li>
-<li> 0.4.7: add multidex support, see more at <a href="https://github.com/Piasy/OkBuck/wiki/Multidex-support">wiki page Multidex support</a>
-</li>
-<li>
-<p>0.4.6: solve problems when generate <code>AndroidManifest.xml</code> like below:</p>
-
-<div class="highlight highlight-source-shell"><pre>[AndroidManifest.xml:7, AndroidManifest.xml:3] Trying to merge incompatible /manifest/uses-permission[@name<span class="pl-k">=</span>android.permission.ACCESS_WIFI_STATE] element:
-  <span class="pl-k">&lt;</span>uses-permission android:name=android.permission.ACCESS_WIFI_STATE<span class="pl-k">&gt;</span>
---    @android:name = android.permission.ACCESS_WIFI_STATE
-++    @ns0:name = android.permission.ACCESS_WIFI_STATE</pre></div>
-</li>
-<li><p>0.4.5: use <code>genrule</code> to generate <code>AndroidManifest.xml</code></p></li>
-<li> 0.4.4: fix <a href="https://github.com/Piasy/OkBuck/issues/42">#42</a>
-</li>
-<li> 0.4.2: different libraries may have the same name, so turn <code>checkDependencyDiffersByVersion</code> to be optional temporarily</li>
-<li> 0.4.1: naive way to fix problems in <code>checkDependencyDiffersByVersion</code>
-</li>
-<li> 0.4.0:
-
-<ul>
-<li> multi-product flavor support! although need improve it.</li>
-<li> fix <a href="https://github.com/Piasy/OkBuck/issues/7">#7</a>
-</li>
-<li> fix <a href="https://github.com/Piasy/OkBuck/issues/8">#8</a>
-</li>
-<li> fix <a href="https://github.com/Piasy/OkBuck/issues/29">#29</a>
-</li>
-<li> fix <a href="https://github.com/Piasy/OkBuck/issues/30">#30</a>
-</li>
+<li> Thanks for Facebook open source <a href="https://github.com/facebook/buck">buck</a> build system.</li>
+<li> Thanks for the discussion and help from <a href="https://github.com/promeG/">promeG</a> during my development.</li>
+<li> Thanks for <a href="#">ヤ①個亼簡單</a> of the manifest merge contribution, and the idea of multi-product flavor support.</li>
+<li> Thanks for <a href="mailto:hujin1860@gmail.com">hujin1860@gmail.com</a> of the manifest genrule advice.</li>
 </ul>
-</li>
-<li> 0.3.5: fix <a href="https://github.com/Piasy/OkBuck/issues/39">#39</a>
-</li>
-<li> 0.3.4: fix <a href="https://github.com/Piasy/OkBuck/issues/22">#22</a> prebuilt native library support</li>
-<li> 0.3.3:
 
-<ul>
-<li> fix <a href="https://github.com/Piasy/OkBuck/issues/25">#25</a>, <a href="https://github.com/Piasy/OkBuck/issues/27">#27</a>
-</li>
-<li> merge <a href="https://github.com/Piasy/OkBuck/pull/35">#35</a>
-</li>
-</ul>
-</li>
-<li> 0.3.2: better error message</li>
-<li> 0.3.1: fix <a href="https://github.com/Piasy/OkBuck/issues/31">#31</a>
-</li>
-<li> 0.3.0:
+<h2>
+<a id="full-change-log" class="anchor" href="#full-change-log" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="CHANGELOG.md">Full Change log</a>
+</h2>
 
-<ul>
-<li> fix <a href="https://github.com/Piasy/OkBuck/issues/15">#15</a> again.</li>
-<li> better dependency process, partly fix <a href="https://github.com/Piasy/OkBuck/wiki/Known-caveats#handle-dependency-conflict">Known caveats: handle dependency conflict</a>
-</li>
-<li> <strong>refactor round 2</strong>, ready for your contributions!</li>
-</ul>
-</li>
-<li> 0.2.7:
+<h2>
+<a id="liscense" class="anchor" href="#liscense" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Liscense</h2>
 
-<ul>
-<li> fix overwrite doesn't work bug</li>
-<li> fix bug when Android library module doesn't have res dir</li>
-<li> .buckconfig will ignore .svn dirs</li>
-<li> fix <a href="https://github.com/Piasy/OkBuck/issues/6">#6</a> again...</li>
-</ul>
-</li>
-<li> 0.2.6: fix <a href="https://github.com/Piasy/OkBuck/issues/14">#14</a>
-</li>
-<li> 0.2.5: fix <a href="https://github.com/Piasy/OkBuck/issues/15">#15</a>
-</li>
-<li> 0.2.4: fix <a href="https://github.com/Piasy/OkBuck/issues/12">#12</a>
-</li>
-<li> 0.2.3: fix <a href="https://github.com/Piasy/OkBuck/issues/11">#11</a>
-</li>
-<li> 0.2.2: fix <a href="https://github.com/Piasy/OkBuck/issues/6">#6</a>
-</li>
-<li> <a href="https://github.com/Piasy/OkBuck/releases/tag/v0.2.1">v0.2.1</a>
-</li>
-<li> <a href="https://github.com/Piasy/OkBuck/releases/tag/v0.1.0">v0.1.0</a>
-</li>
-<li> <a href="https://github.com/Piasy/OkBuck/releases/tag/v0.0.1">v0.0.1</a>
-</li>
-</ul>
+<pre><code>The MIT License (MIT)
+
+Copyright (c) 2015 Piasy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</code></pre>
         </section>
 
         <aside id="sidebar">
