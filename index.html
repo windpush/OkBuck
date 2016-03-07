@@ -97,7 +97,7 @@ I'll add your repo in this list.</p>
         jcenter()
     }
     dependencies {
-        classpath <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy:okbuck-gradle-plugin:1.0.0-beta5<span class="pl-pds">'</span></span>
+        classpath <span class="pl-s"><span class="pl-pds">'</span>com.github.piasy:okbuck-gradle-plugin:1.0.0-beta7<span class="pl-pds">'</span></span>
     }
 }
 
@@ -179,6 +179,11 @@ in corresponding <code>AndroidManifest.xml</code> file</li>
                     <span class="pl-s"><span class="pl-pds">'</span>prod<span class="pl-pds">'</span></span>,
             ]
     ]
+    cpuFilters <span class="pl-k">=</span> [
+            <span class="pl-c1">app</span>: [
+                    <span class="pl-s"><span class="pl-pds">'</span>armeabi<span class="pl-pds">'</span></span>,
+            ]
+    ]
 }</pre></div>
 
 <h2>
@@ -206,6 +211,10 @@ please read <a href="https://github.com/Piasy/OkBuck/wiki/Exopackage-Configurati
 if you don't need exopackage, you can ignore these three parameters</li>
 <li> <code>flavorFilter</code> is a map, used for controlling OkBuck only generate BUCK files for flavors 
 you need, default is empty, which will generate all flavors BUCK file</li>
+<li> <code>cpuFilters</code> is a map, used for controlling BUCK only create the specific cpu architecture
+native library folder in your apk file, the same as <code>ndk.abiFilter</code> of gradle, support values
+are: <code>armeabi</code>, <code>armeabi-v7a</code>, <code>x86</code>, <code>x86_64</code>, <code>mips</code>
+</li>
 <li> After apply OkBuck plugin (sync project after modify root project <code>build.gradle</code> file), 
 two tasks are added into your gradle project , <code>okbuck</code>, and <code>okbuckClean</code>
 
