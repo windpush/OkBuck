@@ -31,7 +31,7 @@
           <h1>
 <a id="okbuck" class="anchor" href="#okbuck" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>OkBuck</h1>
 
-<p><a href="https://bintray.com/okbuilds/maven/OkBuild/_latestVersion"> <img src="https://api.bintray.com/packages/okbuilds/maven/OkBuild/images/download.svg" alt="Download"> </a>
+<p><a href="https://bintray.com/okbuild/maven/OkBuild/_latestVersion"> <img src="https://api.bintray.com/packages/okbuild/maven/OkBuild/images/download.svg" alt="Download"> </a>
 <a href="https://travis-ci.org/OkBuilds/OkBuck"><img src="https://travis-ci.org/OkBuilds/OkBuck.svg?branch=master" alt="Master branch build status"></a>
 <a href="https://android-arsenal.com/details/1/2593"><img src="https://img.shields.io/badge/Android%20Arsenal-OkBuck-green.svg?style=flat" alt="Android Arsenal"></a></p>
 
@@ -58,7 +58,7 @@ buggy. OkBuck automates this migration with very few lines of configuration.</p>
         jcenter()
     }
     dependencies {
-        classpath <span class="pl-s"><span class="pl-pds">'</span>com.github.okbuilds:okbuild-gradle-plugin:2.0.0-alpha1<span class="pl-pds">'</span></span>
+        classpath <span class="pl-s"><span class="pl-pds">'</span>com.github.okbuilds:okbuild-gradle-plugin:0.1.0<span class="pl-pds">'</span></span>
     }
 }
 
@@ -94,16 +94,33 @@ apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds"
             ]
     ]
     exopackage <span class="pl-k">=</span> [
-            <span class="pl-c1">app</span>: <span class="pl-c1">true</span>
+            <span class="pl-c1">appDebug</span>: <span class="pl-c1">true</span>
+    ]
+    annotationProcessors <span class="pl-k">=</span> [
+            <span class="pl-s"><span class="pl-pds">"</span>local-apt-dependency<span class="pl-pds">"</span></span>: [<span class="pl-s"><span class="pl-pds">'</span>com.okuilds.apt.ExampleProcessor<span class="pl-pds">'</span></span>]
     ]
     appLibDependencies <span class="pl-k">=</span> [
-            <span class="pl-c1">app</span>: [
+            <span class="pl-s"><span class="pl-pds">'</span>appProd<span class="pl-pds">'</span></span>: [
                     <span class="pl-s"><span class="pl-pds">'</span>buck-android-support<span class="pl-pds">'</span></span>,
-                    <span class="pl-s"><span class="pl-pds">'</span>multidex<span class="pl-pds">'</span></span>,
-                    <span class="pl-s"><span class="pl-pds">'</span>javalibrary<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>com.android.support:multidex<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>libraries/javalibrary:main<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>libraries/common:paidRelease<span class="pl-pds">'</span></span>,
+            ],
+            <span class="pl-s"><span class="pl-pds">'</span>appDev<span class="pl-pds">'</span></span>: [
+                    <span class="pl-s"><span class="pl-pds">'</span>buck-android-support<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>com.android.support:multidex<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>libraries/javalibrary:main<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>libraries/common:freeDebug<span class="pl-pds">'</span></span>,
+            ],
+            <span class="pl-s"><span class="pl-pds">'</span>appDemo<span class="pl-pds">'</span></span>: [
+                    <span class="pl-s"><span class="pl-pds">'</span>buck-android-support<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>com.android.support:multidex<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>libraries/javalibrary:main<span class="pl-pds">'</span></span>,
+                    <span class="pl-s"><span class="pl-pds">'</span>libraries/common:paidRelease<span class="pl-pds">'</span></span>,
             ]
     ]
     buckProjects <span class="pl-k">=</span> project<span class="pl-k">.</span>subprojects
+    keep <span class="pl-k">=</span> []
 }</pre></div>
 
 <ul>
@@ -119,7 +136,21 @@ if you don't need multidex, you can ignore these parameters</li>
 <li> <code>exopackage</code>, <code>appClassSource</code> and <code>appLibDependencies</code> are used for 
 configuring buck's exopackage mode. For more details about exopackage configuration, 
 please read the <a href="https://github.com/OkBuilds/OkBuck/wiki/Exopackage-Configuration-Guide">Exopackage wiki page</a>, if you don't need exopackage, you can ignore these parameters</li>
+<li>
+<code>annotationProcessors</code> is used to depend on annotation processors declared locally as another gradle module in the same root project.</li>
 <li> <code>buckProjects</code> is a set of projects to generate buck configs for. Default is all sub projects of the root project.</li>
+<li>
+<code>keep</code> is a list of files to not clean up by the plugin when running <code>okbuckclean</code>. This may be useful to keep the <code>buck-out</code> folder around for faster incremental builds even when buck files are regenerated. Also useful if you want made manual modifications to some buck configuration and would like to keep it intact while regenerating the configuration for other projects.</li>
+<li>The keys used to configure various options can be either for 
+
+<ul>
+<li>All buildTypes and flavors i.e <code>app</code>
+</li>
+<li>All buildTypes of a particular flavor i.e 'appDemo'</li>
+<li>All flavors of a particular buildType i.e 'appDebug'</li>
+<li>A particular variant (buildType + flavor combination) i,e 'appDemoRelease'</li>
+</ul>
+</li>
 </ul>
 
 <h2>
