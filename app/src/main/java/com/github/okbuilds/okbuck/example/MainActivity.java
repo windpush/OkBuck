@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import butterknife.ButterKnife;
 import com.example.hellojni.HelloJni;
 import com.github.okbuilds.okbuck.example.common.Calc;
 import com.github.okbuilds.okbuck.example.common.CalcMonitor;
@@ -18,10 +18,7 @@ import com.github.okbuilds.okbuck.example.dummylibrary.DummyActivity;
 import com.github.okbuilds.okbuck.example.dummylibrary.DummyAndroidClass;
 import com.github.okbuilds.okbuck.example.javalib.DummyJavaClass;
 import com.promegu.xlog.base.XLog;
-
 import javax.inject.Inject;
-
-import butterknife.ButterKnife;
 
 @XLog
 public class MainActivity extends AppCompatActivity {
@@ -56,22 +53,20 @@ public class MainActivity extends AppCompatActivity {
         mTextView.setText(String.format("%s %s, --from %s.", getString(R.string.dummy_library_android_str),
                 mDummyAndroidClass.getAndroidWord(this), mDummyJavaClass.getJavaWord()));
 
-        mTextView2.setText(mTextView2.getText() + "\n\n" + HelloJni.stringFromJNI() + "\n\n" + FlavorLogger.log(this));
+        mTextView2.setText(mTextView2.getText() + "\n\n" + HelloJni.stringFromJNI() + "\n\n" + com.github.okbuilds.okbuck.example.FlavorLogger
 
-        // using explicit reference to cross module R reference:
-        int id = android.support.design.R.string.appbar_scrolling_view_behavior;
+                .log(this));
 
         if (BuildConfig.CAN_JUMP) {
-            mTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //startActivity(new Intent(MainActivity.this, CollapsingAppBarActivity.class));
-                    startActivity(new Intent(MainActivity.this, DummyActivity.class));
-                }
+            mTextView.setOnClickListener(v -> {
+                startActivity(new Intent(MainActivity.this, DummyActivity.class));
             });
         }
 
         Log.d("test", "1 + 2 = " + new Calc(new CalcMonitor(this)).add(1, 2));
+
+        GithubUser user = GithubUser.create(100, "OkBuilds");
+        Toast.makeText(this, user.login(), Toast.LENGTH_SHORT).show();
     }
 
     private void bind() {

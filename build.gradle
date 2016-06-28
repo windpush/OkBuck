@@ -18,6 +18,7 @@ allprojects {
 }
 
 ext {
+    // due to travis-ci, we must keep build tool at v23.0.1
     androidCompileSdkVersion = 23
     androidBuildToolsVersion = '23.0.1'
     androidMinSdkVersion = 15
