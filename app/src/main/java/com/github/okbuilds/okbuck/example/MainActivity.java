@@ -17,6 +17,7 @@ import com.github.okbuilds.okbuck.example.common.IMyAidlInterface;
 import com.github.okbuilds.okbuck.example.dummylibrary.DummyActivity;
 import com.github.okbuilds.okbuck.example.dummylibrary.DummyAndroidClass;
 import com.github.okbuilds.okbuck.example.javalib.DummyJavaClass;
+import com.github.okbuilds.okbuck.example.sqldelightmodel.GithubUser;
 import com.promegu.xlog.base.XLog;
 import javax.inject.Inject;
 

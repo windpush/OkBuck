@@ -35,12 +35,19 @@ final class AndroidLibraryRuleComposer extends AndroidBuckRuleComposer {
         if (target.retrolambda) {
             postprocessClassesCommands.add(RetroLambdaGenerator.generate(target))
         }
+        Set<String> srcSet = target.main.sources
+        if (target.sqldelight) {
+            srcSet.addAll(target.sqldelight.sources)
+            if (srcSet.size() > 1) {
+                throw new IllegalStateException("SqlDelight model module must not contain java dir in main source set")
+            }
+        }
 
         return new AndroidLibraryRule(
                 src(target),
                 ["PUBLIC"],
                 deps,
-                target.main.sources,
+                srcSet,
                 target.manifest,
                 target.annotationProcessors as List,
                 aptDeps,

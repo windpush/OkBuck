@@ -1,4 +1,4 @@
-package com.github.okbuilds.okbuck.example;
+package com.github.okbuilds.okbuck.example.sqldelightmodel;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -8,10 +8,7 @@ import com.google.gson.TypeAdapter;
  * Created by Piasy{github.com/Piasy} on 6/28/16.
  */
 @AutoValue
-public abstract class GithubUser {
-    public abstract long id();
-    public abstract String login();
-
+public abstract class GithubUser implements GithubUserModel {
     public static TypeAdapter<GithubUser> typeAdapter(final Gson gson) {
         return new AutoValue_GithubUser.GsonTypeAdapter(gson);
     }

@@ -96,6 +96,7 @@ dependencies {
     prodCompile project(path: ':dummylibrary', configuration: 'paidRelease')
     demoCompile project(path: ':dummylibrary', configuration: 'paidRelease')
     compile project(':libraries:emptylibrary')
+    compile project(':libraries:sqldelightmodel')
 
     compile 'com.github.promeg:xlog-android-idle:2.1.1'
 

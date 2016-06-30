@@ -4,9 +4,10 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:2.2.0-alpha4'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        classpath 'com.squareup.sqldelight:gradle-plugin:0.4.2'
     }
 }
 
@@ -14,6 +15,9 @@ allprojects {
     repositories {
         mavenLocal()
         jcenter()
+        maven {
+            url  "http://dl.bintray.com/okbuild/maven"
+        }
     }
 }
 

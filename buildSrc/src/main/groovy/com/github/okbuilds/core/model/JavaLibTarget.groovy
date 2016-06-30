@@ -9,6 +9,7 @@ class JavaLibTarget extends JavaTarget {
 
     static final String MAIN = "main"
     final Scope retrolambda
+    final Scope sqldelight
 
     protected final List<String> extraJvmArgs = []
 
@@ -21,6 +22,14 @@ class JavaLibTarget extends JavaTarget {
             extraJvmArgs.addAll(["-bootclasspath", bootClasspath])
         } else {
             retrolambda = null
+        }
+
+        // SqlDelight
+        if (project.plugins.hasPlugin('com.squareup.sqldelight')) {
+            sqldelight = new Scope(project, ["provided"] as Set,
+                    [new File(project.projectDir, "build/generated/source/sqldelight")] as Set)
+        } else {
+            sqldelight = null
         }
     }
 
