@@ -137,8 +137,8 @@ final class BuckFileGenerator {
         if (target.sqldelight != null) {
             String runner = target.sqldelight.externalDeps.find { it.contains("SqlDelightBin") }
             if (runner == null) {
-                throw new IllegalStateException("SqlDelight model module must declare the dependency: " +
-                        "`provided(group: 'com.github.okbuilds', name: 'SqlDelightBin', version: '1.0.0', ext: 'jar', classifier: '')`")
+                throw new IllegalStateException("SqlDelight model module must declare the SqlDelightBin dependency, " +
+                        "read more at https://github.com/OkBuilds/OkBuck/wiki/Known-caveats#sqldelight-work-around")
             }
             rules.add(GenSqlDelightRuleComposer.compose(target,
                     target.project.rootProject.projectDir.absolutePath + "/" + runner))

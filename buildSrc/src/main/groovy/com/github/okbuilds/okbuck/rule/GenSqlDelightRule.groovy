@@ -16,7 +16,7 @@ final class GenSqlDelightRule extends BuckRule {
         printer.println("genrule(")
         printer.println("\tname = '${name}',")
         printer.println("\tsrcs = glob([")
-        printer.println("\t\t'src/main/sqldelight/**/*.sq',")
+        printer.println("\t\t'src/*/sqldelight/**/*.sq',")
         printer.println("\t]),")
         printer.println("\tout = 'out',")
         printer.println("\tbash = 'java -jar ${mSqlDelightRunnerPath} \$SRCDIR ${mProjectDir} && echo \$SRCS > \$OUT',")

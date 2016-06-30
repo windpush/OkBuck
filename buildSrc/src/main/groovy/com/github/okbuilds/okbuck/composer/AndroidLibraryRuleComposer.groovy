@@ -38,9 +38,6 @@ final class AndroidLibraryRuleComposer extends AndroidBuckRuleComposer {
         Set<String> srcSet = target.main.sources
         if (target.sqldelight) {
             srcSet.addAll(target.sqldelight.sources)
-            if (srcSet.size() > 1) {
-                throw new IllegalStateException("SqlDelight model module must not contain java dir in main source set")
-            }
         }
 
         return new AndroidLibraryRule(

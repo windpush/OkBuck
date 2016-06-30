@@ -17,6 +17,7 @@ import com.github.okbuilds.okbuck.example.common.IMyAidlInterface;
 import com.github.okbuilds.okbuck.example.dummylibrary.DummyActivity;
 import com.github.okbuilds.okbuck.example.dummylibrary.DummyAndroidClass;
 import com.github.okbuilds.okbuck.example.javalib.DummyJavaClass;
+import com.github.okbuilds.okbuck.example.sqldelightmodel.GithubRepo;
 import com.github.okbuilds.okbuck.example.sqldelightmodel.GithubUser;
 import com.promegu.xlog.base.XLog;
 import javax.inject.Inject;
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
         GithubUser user = GithubUser.create(100, "OkBuilds");
         Toast.makeText(this, user.login(), Toast.LENGTH_SHORT).show();
+        GithubRepo repo = GithubRepo.create(100, "OkBuck", "auto buck");
+        Toast.makeText(this, repo.name() + ": " + repo.description(), Toast.LENGTH_SHORT).show();
     }
 
     private void bind() {
