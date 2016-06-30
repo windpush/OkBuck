@@ -11,10 +11,7 @@ android:
     - extra-android-support
 
 script:
-  - bash ./gradlew okbuck installBuck &&
-    ./buck build appDevDebug appDevRelease appProdDebug appProdRelease another-appDebug another-appRelease &&
-    ./buck project --ide intellij &&
-    ./buck project --ide intellij --deprecated-ij-generation
+  - bash ./gradlew okbuck installBuck && ./buck build appDevDebug && ./buck build appDevRelease && ./buck build appProdDebug && ./buck build appProdRelease && ./buck build another-appDebug && ./buck build another-appRelease && ./buck project --ide intellij && ./buck project --ide intellij --deprecated-ij-generation
 
 notifications:
   email: false
